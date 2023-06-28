@@ -83,8 +83,6 @@ const useWordle = (solution) => {
       return newKeys;
     });
 
-    console.log(usedKeys);
-
     // reset currentGuess once this turn is over!
     setCurrentGuess('');
   };
