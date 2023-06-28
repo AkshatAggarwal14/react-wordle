@@ -1,7 +1,26 @@
+import { useEffect, useState } from 'react';
+import Wordle from './components/Wordle';
+
 function App() {
+  const [solution, setSolution] = useState(null);
+
+  useEffect(() => {
+    fetch(
+      'https://raw.githubusercontent.com/techtribeyt/Wordle/main/wordle_answers.txt'
+    )
+      .then((response) => response.text())
+      .then((data) => data.split('\n'))
+      .then((dataList) => {
+        const randomSolution =
+          dataList[Math.floor(Math.random() * dataList.length)];
+        setSolution(randomSolution);
+      });
+  }, []);
+
   return (
     <div className="App">
       <h1>React Wordle</h1>
+      {solution && <Wordle solution={solution} />}
     </div>
   );
 }
