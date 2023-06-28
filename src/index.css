@@ -75,6 +75,41 @@ h1 {
   animation: bounce 0.1s ease-in-out forwards; /* applying the bounce animation */
 }
 
+.keypad {
+  max-width: 500px;
+  margin: 20px auto;
+}
+
+/* each key */
+.keypad > div {
+  margin: 5px;
+  width: 40px;
+  height: 50px;
+  background: #eeeeee;
+  display: inline-block;
+  border-radius: 5px;
+  text-transform: uppercase;
+  line-height: 50px; /* text sits vertically in middle */
+}
+
+/* each key on getting a color class */
+.keypad > div.green {
+  background: #5ac85a;
+  color: #fff;
+  transition: all 0.3s ease-in;
+}
+
+.keypad > div.yellow {
+  background: #e2cc68;
+  color: #fff;
+  transition: all 0.3s ease-in;
+}
+
+.keypad > div.grey {
+  background: #a1a1a1;
+  color: #fff;
+  transition: all 0.3s ease-in;
+}
 /* rotating effect on Enter */
 @keyframes flip {
   0% {
