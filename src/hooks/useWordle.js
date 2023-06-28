@@ -3,7 +3,7 @@ import { useState } from 'react';
 const useWordle = (solution) => {
   const [turn, setTurn] = useState(0);
   const [currentGuess, setCurrentGuess] = useState('');
-  const [guesses, setGuesses] = useState([]); // guess => array
+  const [guesses, setGuesses] = useState([...Array(6)]); // guess => array (initially 6 undefined values)
   const [history, setHistory] = useState([]); // history => string {for no duplication}
   const [isCorrect, setIsCorrect] = useState(false);
 
@@ -33,11 +33,33 @@ const useWordle = (solution) => {
   };
 
   // add guess, check correct, update turn
-  const addGuess = () => {};
+  const addGuess = (formattedGuess) => {
+    if (currentGuess === solution) {
+      setIsCorrect(true);
+    }
+
+    setGuesses((prevGuesses) => {
+      const newGuesses = [...prevGuesses];
+      newGuesses[turn] = formattedGuess;
+      return newGuesses;
+    });
+
+    setHistory((prevHistory) => {
+      return [...prevHistory, currentGuess];
+    });
+
+    setTurn((prevTurn) => {
+      return prevTurn + 1;
+    });
+
+    // reset currentGuess once this turn is over!
+    setCurrentGuess('');
+  };
 
   // handle keyup events, submit guess on "enter"
-  // destructure event here!
   const handleKeyup = ({ key }) => {
+    // destructure event here!
+
     if (key === 'Enter') {
       // only add if turn < 5
       if (turn > 5) {
@@ -55,8 +77,8 @@ const useWordle = (solution) => {
         return;
       }
 
-      const formatted = formatGuess();
-      console.log(formatted);
+      const formattedGuess = formatGuess();
+      addGuess(formattedGuess);
     }
     if (key === 'Backspace') {
       setCurrentGuess((prev) => prev.slice(0, -1));
