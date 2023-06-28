@@ -36,14 +36,83 @@ h1 {
 
 /* color squares */
 .row > div.green {
-  background: #5ac85a;
-  border-color: #5ac85a;
+  /* define these variables! */
+  --background: #5ac85a;
+  --border-color: #5ac85a;
+  animation: flip 0.5s ease forwards;
 }
+
 .row > div.grey {
-  background: #a1a1a1;
-  border-color: #a1a1a1;
+  --background: #a1a1a1;
+  --border-color: #a1a1a1;
+  animation: flip 0.5s ease forwards;
 }
+
 .row > div.yellow {
-  background: #e2cc68;
-  border-color: #e2cc68;
+  --background: #e2cc68;
+  --border-color: #e2cc68;
+  animation: flip 0.5s ease forwards;
+}
+
+/* delaying animation for each letter in a row */
+.row > div:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.row > div:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+.row > div:nth-child(4) {
+  animation-delay: 0.6s;
+}
+
+.row > div:nth-child(5) {
+  animation-delay: 0.8s;
+}
+
+.row.current > div.filled {
+  animation: bounce 0.1s ease-in-out forwards; /* applying the bounce animation */
+}
+
+/* rotating effect on Enter */
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+    background: #ffffff;
+    border-color: #333333;
+  }
+  45% {
+    transform: rotateX(90deg);
+    background: #ffffff;
+    border-color: #333333;
+    /* the above 2 properties ensure that we dont see color until 46% */
+  }
+  55% {
+    transform: rotateX(90deg);
+    background: var(--background);
+    border-color: var(--border-color);
+    color: #eeeeee;
+  }
+  100% {
+    transform: rotateX(0%);
+    background: var(--background);
+    border-color: var(--border-color);
+    color: #eeeeee;
+  }
+}
+
+/* bouncing when we input */
+@keyframes bounce {
+  0% {
+    transform: scale(1);
+    border-color: #dddddd;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    border-color: #333333;
+  }
 }
