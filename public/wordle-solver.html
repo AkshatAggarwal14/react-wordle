@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Wordle Solver</title>
+    <style>
+        @font-face {
+            font-family: "Martel Sans";
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: local("Martel Sans Regular"), local("MartelSans-Regular"),
+                url(https://fonts.gstatic.com/s/martelsans/v6/h0GsssGi7VdzDgKjM-4d8hjYx-4.woff2) format("woff2");
+        }
+
+        * {
+            font-family: "Martel Sans", sans-serif;
+            color: white;
+        }
+
+        h1,
+        h2 {
+            margin: 0px;
+            margin-top: 10px;
+        }
+
+        body {
+            margin: 0;
+            background-color: #121212;
+        }
+
+        #container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            justify-content: center;
+        }
+
+        #wordle {
+            border: 4px solid white;
+            border-radius: 10px;
+            width: 95%;
+            height: 80vh;
+            max-width: 520px;
+            margin-top: 10vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #inputgroup {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        #inputgroup .letter {
+            width: 50px;
+            height: 50px;
+            background: transparent;
+            border: 2px solid white;
+            margin: 3px;
+            font-size: 28px;
+            text-align: center;
+        }
+
+        #contains,
+        #notcontains {
+            width: 80%;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #containstoggle,
+        #notcontainstoggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        #contains .letter,
+        #notcontains .letter {
+            background: transparent;
+            border: 2px solid white;
+            font-size: 18px;
+            margin: 3px;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+        }
+
+        #wordlist {
+            font-size: 25px;
+            max-height: 60vh;
+            overflow-y: scroll;
+            scrollbar-width: none;
+            text-align: center;
+        }
+
+        #wordlist li {
+            letter-spacing: 2px;
+        }
+
+        #wordlist::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <div id="wordle">
+            <h1>WORDLE SOLVER</h1>
+            <div id="inputgroup"></div>
+            <h2>CONTAINS<button id="containstoggle">▼</button></h2>
+            <div id="contains"></div>
+            <h2>DOES NOT CONTAIN<button id="notcontainstoggle">▼</button></h2>
+            <div id="notcontains"></div>
+            <ul id="wordlist"></ul>
+        </div>
+    </div>
+</body>
+<script>
+    let wordlist;
+
+    let boxes = [];
+    for (let i = 0; i < 5; i++) {
+        let box = document.createElement("input");
+        box.type = "text";
+        box.className = "letter";
+        box.maxLength = "1";
+        document.querySelector("#inputgroup").appendChild(box);
+        boxes.push(box);
+    }
+
+    for (let i = 0; i < 5; i++) {
+        boxes[i].addEventListener("keyup", (e) => {
+            if (e.keyCode == 8 && boxes[i].value == "" && i > 0) {
+                boxes[i - 1].focus();
+            } else if (boxes[i].value.length == 1 && i + 1 < boxes.length) {
+                boxes[i + 1].focus();
+            }
+
+            getWords();
+        });
+    }
+
+    let containsButtons = document.querySelector("#contains");
+    let contains = new Set();
+
+    let notContainsButtons = document.querySelector("#notcontains");
+    let notContains = new Set();
+
+    let containsState = false;
+    let notContainsState = false;
+
+    containsButtons.style.display = "none";
+    notContainsButtons.style.display = "none";
+
+    document.querySelector("#containstoggle").addEventListener("click", (e) => {
+        containsButtons.style.display = containsState ? "block" : "none";
+        containsState = !containsState;
+    });
+
+    document.querySelector("#notcontainstoggle").addEventListener("click", (e) => {
+        notContainsButtons.style.display = notContainsState ? "block" : "none";
+        notContainsState = !notContainsState;
+    });
+
+    for (c of "abcdefghijklmnopqrstuvwxyz".split("")) {
+        let button = document.createElement("button");
+        button.className = "letter";
+        button.innerText = c;
+        button.addEventListener("click", (e) => {
+            if (contains.has(e.target.innerText)) {
+                contains.delete(e.target.innerText);
+                button.style.background = "transparent";
+                button.style.color = "white";
+            } else {
+                contains.add(e.target.innerText);
+                button.style.background = "white";
+                button.style.color = "black";
+            }
+            getWords();
+        });
+        containsButtons.appendChild(button);
+    }
+
+    for (c of "abcdefghijklmnopqrstuvwxyz".split("")) {
+        let button = document.createElement("button");
+        button.className = "letter";
+        button.innerText = c;
+        button.addEventListener("click", (e) => {
+            if (notContains.has(e.target.innerText)) {
+                notContains.delete(e.target.innerText);
+                button.style.background = "transparent";
+                button.style.color = "#FFF";
+            } else {
+                notContains.add(e.target.innerText);
+                button.style.background = "#FFF";
+                button.style.color = "black";
+            }
+            getWords();
+        });
+        notContainsButtons.appendChild(button);
+    }
+
+    async function getWords() {
+        if (!localStorage.getItem("wordlist")) {
+            await fetch(
+                "https://raw.githubusercontent.com/tabatkins/wordle-list/main/words"
+            )
+                .then((res) => res.text())
+                .then((words) => {
+                    localStorage.setItem("wordlist", words);
+                });
+        }
+
+        let letters = document.querySelectorAll("#inputgroup input");
+        let pattern = "^";
+        letters.forEach((letter) => {
+            pattern += letter.value || ".";
+        });
+        pattern += "$";
+        wordlist = localStorage.getItem("wordlist").split("\n").filter((word) => new RegExp(pattern).test(word));
+        if (contains.size > 0) {
+            wordlist = wordlist.filter((word) => {
+                for (c of contains) {
+                    if (!word.includes(c)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+        if (notContains.size > 0) {
+            wordlist = wordlist.filter((word) => {
+                for (c of notContains) {
+                    if (word.includes(c)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+        }
+        let listHTML = `COUNT: ${wordlist.length}`;
+        listHTML += wordlist.map((word) => `<li>${word}</li>`).join("");
+        document.querySelector("#wordlist").innerHTML = listHTML;
+    }
+</script>
+
+</html>
