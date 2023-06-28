@@ -18,7 +18,7 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div>
       <h1>React Wordle</h1>
       {solution && <Wordle solution={solution} />}
     </div>

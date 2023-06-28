@@ -1,9 +1,5 @@
-import { useState } from 'react';
-
 export default function Keypad({ usedKeys }) {
-  const [letters, setLetters] = useState(
-    'abcdefghijklmnopqrstuvwxyz'.split('')
-  );
+  const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
 
   return (
     <div className="keypad">
