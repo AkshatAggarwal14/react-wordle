@@ -1,16 +1,39 @@
-export default function Keypad({ usedKeys }) {
+export default function Keypad({ usedKeys, handleKeyup }) {
   const letters = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+  const handleButtonClick = (value) => {
+    handleKeyup({ key: value });
+  };
 
   return (
     <div className="keypad">
       {letters.map((letter) => {
         const color = usedKeys[letter];
         return (
-          <div key={letter} className={color}>
+          <button
+            key={letter}
+            className={color}
+            value={letter}
+            onClick={() => handleButtonClick(letter)}
+          >
             {letter}
-          </div>
+          </button>
         );
       })}
+      <button
+        key="Enter"
+        value="Enter"
+        onClick={() => handleButtonClick('Enter')}
+      >
+        ↵
+      </button>
+      <button
+        key="Backspace"
+        value="Backspace"
+        onClick={() => handleButtonClick('Backspace')}
+      >
+        ⌫
+      </button>
     </div>
   );
 }

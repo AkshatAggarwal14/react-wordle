@@ -25,7 +25,7 @@ h1 {
   display: block;
   width: 60px;
   height: 60px;
-  border: 1px solid #bbb;
+  border: 1px solid #bbbbbb;
   margin: 4px;
   text-align: center;
   line-height: 60px;
@@ -81,34 +81,52 @@ h1 {
 }
 
 /* each key */
-.keypad > div {
+.keypad > button {
   margin: 5px;
   width: 40px;
   height: 50px;
   background: #eeeeee;
   display: inline-block;
   border-radius: 5px;
+  border: none;
+  font-size: 1rem;
   text-transform: uppercase;
-  line-height: 50px; /* text sits vertically in middle */
+  transition: all 0.2s ease-in-out;
+}
+
+.keypad > button:hover {
+  transform: scale(1.1);
 }
 
 /* each key on getting a color class */
-.keypad > div.green {
+.keypad > button.green {
   background: #5ac85a;
   color: #fff;
   transition: all 0.3s ease-in;
 }
 
-.keypad > div.yellow {
+.keypad > button.green:hover {
+  background: #90d490;
+}
+
+.keypad > button.yellow {
   background: #e2cc68;
   color: #fff;
   transition: all 0.3s ease-in;
 }
 
-.keypad > div.grey {
+.keypad > button.yellow:hover {
+  background: #e4d7a0;
+}
+
+.keypad > button.grey {
   background: #a1a1a1;
   color: #fff;
   transition: all 0.3s ease-in;
+}
+
+.keypad > button.grey:hover {
+  background: #c9c9c9;
 }
 
 /* modal */
@@ -143,6 +161,28 @@ h1 {
 
 .modal .green {
   color: #5ac85a;
+}
+
+.reset-button {
+  background-color: #ffffff;
+  border: 1px solid rgb(209, 213, 219);
+  border-radius: 0.5rem;
+  box-sizing: border-box;
+  font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system, system-ui,
+    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.reset-button:hover {
+  background-color: rgb(249, 250, 251);
+  transform: scale(1.1);
 }
 
 /* rotating effect on Enter */
@@ -185,24 +225,4 @@ h1 {
     transform: scale(1);
     border-color: #333333;
   }
-}
-
-button {
-  background-color: #ffffff;
-  border: 1px solid rgb(209, 213, 219);
-  border-radius: 0.5rem;
-  box-sizing: border-box;
-  font-family: 'Inter var', ui-sans-serif, system-ui, -apple-system, system-ui,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.25rem;
-  padding: 0.75rem 1rem;
-  text-align: center;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: rgb(249, 250, 251);
 }
