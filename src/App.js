@@ -28,7 +28,6 @@ function App() {
   return (
     <div>
       <h1>React Wordle</h1>
-      {console.log(solution)}
       {solution && <Wordle solution={solution} />}
     </div>
   );
