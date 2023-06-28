@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const useWordle = (solution) => {
   const [turn, setTurn] = useState(0);
@@ -7,6 +7,28 @@ const useWordle = (solution) => {
   const [history, setHistory] = useState([]); // history => string {for no duplication}
   const [isCorrect, setIsCorrect] = useState(false);
   const [usedKeys, setUsedKeys] = useState({}); // {a: 'green'}...
+  const [validGuessList, setValidGuessList] = useState([]);
+
+  useEffect(() => {
+    const storedValidGuesses = localStorage.getItem('valid_guesses');
+
+    if (storedValidGuesses) {
+      setValidGuessList(storedValidGuesses.split(' '));
+    } else {
+      fetch(
+        'https://raw.githubusercontent.com/techtribeyt/Wordle/main/wordle_guesses.txt'
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          const dataList = data.split('\n');
+          setValidGuessList(dataList);
+          localStorage.setItem('valid_guesses', dataList.join(' '));
+        })
+        .catch((error) => {
+          console.error('Error fetching valid guesses:', error);
+        });
+    }
+  }, []);
 
   // format a guess => [{key: 'a', color: 'yellow'}]
   const formatGuess = () => {
@@ -105,6 +127,11 @@ const useWordle = (solution) => {
       // check word is 5 chars long
       if (currentGuess.length !== 5) {
         console.log('word must be 5 chars long');
+        return;
+      }
+
+      if (!validGuessList.includes(currentGuess)) {
+        console.log('invalid guess');
         return;
       }
 

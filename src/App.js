@@ -21,6 +21,9 @@ function App() {
             dataList[Math.floor(Math.random() * dataList.length)];
           setSolution(randomSolution);
           localStorage.setItem('words', dataList.join(' '));
+        })
+        .catch((error) => {
+          console.error('Error fetching valid answers:', error);
         });
     }
   }, []);
