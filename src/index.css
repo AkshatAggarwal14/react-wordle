@@ -32,6 +32,7 @@ h1 {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 2.5em;
+  transition: all 0.2s ease-in-out;
 }
 
 /* color squares */
@@ -81,7 +82,7 @@ h1 {
 }
 
 /* each key */
-.keypad > button {
+.keyrow > button {
   margin: 5px;
   width: 40px;
   height: 50px;
@@ -94,38 +95,38 @@ h1 {
   transition: all 0.2s ease-in-out;
 }
 
-.keypad > button:hover {
+.keyrow > button:hover {
   transform: scale(1.1);
 }
 
 /* each key on getting a color class */
-.keypad > button.green {
+.keyrow > button.green {
   background: #5ac85a;
   color: #fff;
   transition: all 0.3s ease-in;
 }
 
-.keypad > button.green:hover {
+.keyrow > button.green:hover {
   background: #90d490;
 }
 
-.keypad > button.yellow {
+.keyrow > button.yellow {
   background: #e2cc68;
   color: #fff;
   transition: all 0.3s ease-in;
 }
 
-.keypad > button.yellow:hover {
+.keyrow > button.yellow:hover {
   background: #e4d7a0;
 }
 
-.keypad > button.grey {
+.keyrow > button.grey {
   background: #a1a1a1;
   color: #fff;
   transition: all 0.3s ease-in;
 }
 
-.keypad > button.grey:hover {
+.keyrow > button.grey:hover {
   background: #c9c9c9;
 }
 
@@ -224,5 +225,23 @@ h1 {
   100% {
     transform: scale(1);
     border-color: #333333;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .keyrow > button {
+    width: 30px;
+    height: 40px;
+    margin: 4px;
+    border-radius: 3px;
+    font-size: 0.8rem;
+  }
+
+  .row > div {
+    width: 50px;
+    height: 50px;
+    margin: 4px;
+    line-height: 50px;
+    font-size: 2em;
   }
 }
